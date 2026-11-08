@@ -229,8 +229,10 @@ function App() {
     monthText = monthNames[month - 1] + "月",
     canvas = useRef(null),
     startRef = useRef(null),
+    prevRef = useRef(null),
     last = useRef(null),
-    width = useRef(5);
+    width = useRef(5),
+    segmentRef = useRef(0);
   useEffect(() => {
     const c: any = canvas.current;
     if (!c) return;
@@ -257,29 +259,37 @@ function App() {
     const g = c.getContext("2d")!;
     if (e.type === "pointerdown") {
       startRef.current = p;
+      prevRef.current = null;
       last.current = p;
       c.setPointerCapture(e.pointerId);
       g.fillStyle = "#2a241e";
       g.beginPath();
-      g.arc(p.x, p.y, 3, 0, 7);
+      width.current = 10;
+      segmentRef.current = 0;
+      g.arc(p.x, p.y, width.current / 2, 0, 7);
       g.fill();
       return;
     }
     if (e.type === "pointermove" && last.current) {
       const q = last.current,
+        p0 = prevRef.current || q,
         dt = Math.max(1, p.t - q.t),
         speed = Math.hypot(p.x - q.x, p.y - q.y) / dt;
-      let w = Math.max(2.5, Math.min(14, 14 - speed * 6));
+      let w = Math.max(3, Math.min(10, 10 - speed * 4));
+      segmentRef.current += 1;
+      if (segmentRef.current > 1000000) segmentRef.current = 3;
       if (e.pointerType === "pen" && e.pressure) w *= 0.4 + e.pressure;
+      if (segmentRef.current > 0 && segmentRef.current <= 3) w *= 0.5;
       width.current = width.current * 0.7 + w * 0.3;
       g.strokeStyle = "#2a241e";
       g.globalAlpha = 0.9;
       g.lineWidth = width.current;
       g.lineCap = "round";
       g.beginPath();
-      g.moveTo(q.x, q.y);
-      g.quadraticCurveTo((q.x + p.x) / 2, (q.y + p.y) / 2, p.x, p.y);
+      g.moveTo((p0.x + q.x) / 2, (p0.y + q.y) / 2);
+      g.quadraticCurveTo(q.x, q.y, (q.x + p.x) / 2, (q.y + p.y) / 2);
       g.stroke();
+      prevRef.current = q;
       last.current = p;
     }
     if (e.type === "pointercancel") {
@@ -299,7 +309,9 @@ function App() {
         else if (!vertical && !horizontal) setHint("笔画请横平竖直");
         if (v === 4 && h === 4 && horizontal) setChant(true);
       }
+      g.globalAlpha = 1;
       last.current = null;
+      prevRef.current = null;
       startRef.current = null;
     }
   };
