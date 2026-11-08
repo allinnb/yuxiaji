@@ -190,7 +190,8 @@ function App() {
     [v, setV] = useState(0),
     [h, setH] = useState(0),
     [hint, setHint] = useState(""),
-    [chant, setChant] = useState(false);
+    [chant, setChant] = useState(false),
+    [shareUrl, setShareUrl] = useState("");
   useEffect(() => {
     const id = setInterval(() => setNow(getNow()), 60000);
     return () => {
@@ -334,14 +335,26 @@ function App() {
     x.font = "72px MaShan";
     x.fillText("玉匣", 90, 140);
     x.font = "42px LXGW";
-    x.fillText(kind === "liu" ? "小六壬" : "出门仪式", 90, 230);
-    x.font = "38px LXGW";
     x.fillText(
-      kind === "liu"
-        ? `${monthText}落${palaces[(month - 1) % 6]} → ${dayCn(day)}落${palaces[(month - 1 + day - 1) % 6]} → ${time}时落${palace.name}`
-        : `喜神 ${dir.xi.map[now.gan]} · 福神 ${dir.fu.map[now.gan]} · 财神 ${dir.cai.map[now.gan]}`,
+      kind === "sign" ? "身体预兆" : kind === "liu" ? "小六壬" : "出门仪式",
       90,
-      340,
+      230,
+    );
+    x.font = "38px LXGW";
+    const shareLines =
+      kind === "sign"
+        ? [`${item.title} · ${zhi}时`, entry.text]
+        : kind === "liu"
+          ? [
+              `${monthText}落${palaces[seq[0]]} → ${dayCn(day)}落${palaces[seq[1]]} → ${time}时落${palace.name}`,
+              palace.verse,
+            ]
+          : [
+              `喜神 ${dir.xi.map[now.gan]} · 福神 ${dir.fu.map[now.gan]} · 财神 ${dir.cai.map[now.gan]}`,
+              (data as any).zongheng.incantation,
+            ];
+    shareLines.forEach((line, i) =>
+      x.fillText(line.slice(0, 34), 90, 340 + i * 70),
     );
     x.font = "30px LXGW";
     x.fillText("民俗参考 · yuxiaji.puwa.online", 90, 1260);
@@ -349,12 +362,19 @@ function App() {
     x.fillRect(900, 1250, 90, 90);
     x.fillStyle = "#fff";
     x.fillText("敕", 925, 1310);
-    c.toBlob((b) => {
+    c.toBlob(async (b) => {
       if (!b) return;
       const u = URL.createObjectURL(b);
+      setShareUrl(u);
+      const file = new File([b], `yuxiaji-${kind}.png`, { type: "image/png" });
+      if (navigator.userAgent.includes("MicroMessenger")) return;
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share?.({ files: [file], title: "玉匣" });
+        return;
+      }
       const a = document.createElement("a");
       a.href = u;
-      a.download = "yuxiaji.png";
+      a.download = file.name;
       a.click();
       setTimeout(() => URL.revokeObjectURL(u), 1000);
     }, "image/png");
@@ -464,7 +484,11 @@ function App() {
                 <input
                   type="number"
                   value={month}
-                  onChange={(e) => setMonth(+e.target.value)}
+                  min={1}
+                  max={12}
+                  onChange={(e) =>
+                    setMonth(Math.max(1, Math.min(12, +e.target.value || 1)))
+                  }
                 />
               </label>
               <label>
@@ -472,7 +496,11 @@ function App() {
                 <input
                   type="number"
                   value={day}
-                  onChange={(e) => setDay(+e.target.value)}
+                  min={1}
+                  max={30}
+                  onChange={(e) =>
+                    setDay(Math.max(1, Math.min(30, +e.target.value || 1)))
+                  }
                 />
               </label>
               <label>
@@ -609,6 +637,21 @@ function App() {
             分享出门卡
           </button>
         </section>
+      )}
+      {shareUrl && (
+        <div
+          className="share-modal"
+          role="dialog"
+          onClick={() => {
+            URL.revokeObjectURL(shareUrl);
+            setShareUrl("");
+          }}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <img src={shareUrl} alt="玉匣分享卡" />
+            <p>长按图片保存</p>
+          </div>
+        </div>
       )}
       <footer>内容本于《玉匣记》，仅供民俗文化参考。</footer>
     </main>
