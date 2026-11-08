@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Solar } from "lunar-javascript";
 import data from "./data.json";
 import PalmChart from "./components/PalmChart";
+import Compass from "./components/Compass";
 import { liurenSeq } from "./lib/liuren";
 import "./style.css";
 const zhis = [
@@ -86,7 +87,7 @@ function getNow() {
     solar: `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`,
   };
 }
-function Compass({ gan, dir }: { gan: string; dir: any }) {
+function LegacyCompass({ gan, dir }: { gan: string; dir: any }) {
   const sectors = [
     ["离", "☲", "南", "top"],
     ["坤", "☷", "西南", "bl"],
