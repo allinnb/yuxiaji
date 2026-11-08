@@ -1,10 +1,21 @@
 export type ShareKind = "sign" | "liu" | "out";
 export type ShareData = { title: string; lines: string[]; url?: string };
 
-export function wrapText(text: string, maxChars = 24) {
+export function wrapText(
+  ctx: CanvasRenderingContext2D,
+  text: string,
+  maxWidth = 860,
+) {
   const out: string[] = [];
-  for (let i = 0; i < text.length; i += maxChars)
-    out.push(text.slice(i, i + maxChars));
+  let line = "";
+  for (const ch of text) {
+    const next = line + ch;
+    if (line && ctx.measureText(next).width > maxWidth) {
+      out.push(line);
+      line = ch;
+    } else line = next;
+  }
+  if (line) out.push(line);
   return out;
 }
 
@@ -16,24 +27,37 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   const ctx = canvas.getContext("2d")!;
   ctx.fillStyle = "#f3ead6";
   ctx.fillRect(0, 0, 1080, 1440);
+  ctx.fillStyle = "rgba(243,234,214,.84)";
+  ctx.beginPath();
+  ctx.roundRect(60, 280, 960, 820, 24);
+  ctx.fill();
+  ctx.strokeStyle = "#b08d57";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
   ctx.fillStyle = "#2a241e";
-  ctx.font = "72px MaShan";
-  ctx.fillText("玉匣", 90, 140);
-  ctx.font = "42px LXGW";
-  ctx.fillText(data.title, 90, 230);
+  ctx.font = "88px MaShan";
+  [..."玉匣"].forEach((ch, i) => ctx.fillText(ch, 980, 90 + i * 96));
+  ctx.font = "40px LXGW";
+  const kindName =
+    data.title === "身体预兆"
+      ? "身兆"
+      : data.title === "小六壬"
+        ? "小六壬"
+        : "出门";
+  [...kindName].forEach((ch, i) => ctx.fillText(ch, 980, 300 + i * 54));
   ctx.font = "38px LXGW";
-  let y = 340;
+  let y = 380;
   data.lines
-    .flatMap((line) => wrapText(line))
+    .flatMap((line) => wrapText(ctx, line))
     .forEach((line) => {
-      ctx.fillText(line, 90, y);
+      ctx.fillText(line, 110, y);
       y += 64;
     });
   ctx.fillStyle = "#2a241e";
   ctx.font = "30px LXGW";
-  ctx.fillText("民俗参考 · yuxiaji.puwa.online", 90, 1260);
+  ctx.fillText("民俗参考", 90, 1330);
   ctx.fillStyle = "#a8382a";
-  ctx.fillRect(900, 1250, 90, 90);
+  ctx.fillRect(90, 1180, 90, 90);
   ctx.fillStyle = "#fff";
   ctx.font = "48px MaShan";
   ctx.fillText("敕", 920, 1315);

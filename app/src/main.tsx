@@ -181,6 +181,17 @@ function LegacyPalm({ active, step }: { active: number; step: number }) {
 }
 function App() {
   const [now, setNow] = useState(getNow()),
+    jieqiText = (() => {
+      const jq: any = now.l.getNextJieQi(true);
+      const target = new Date(jq.getSolar().toYmd());
+      const base = new Date(
+        `${now.solar.slice(0, 4)}-${now.solar.slice(5, 7)}-${now.solar.slice(8, 10)}`,
+      );
+      const days = Math.ceil((target.getTime() - base.getTime()) / 86400000);
+      return days === 0
+        ? `今日${jq.getName()}`
+        : `距${jq.getName()}还有${days}天`;
+    })(),
     almanac = {
       suitable: ["整饰", "沐浴", "纳财", "出行", "祭祀", "安床"],
       avoid: ["动土", "嫁娶", "破土", "安葬", "开仓", "伐木"],
@@ -423,7 +434,7 @@ function App() {
   return (
     <main>
       <Header now={now} />
-      <Almanac now={now} almanac={almanac} />
+      <Almanac now={now} almanac={{ ...almanac, jieqiText }} />
       <section className="hero">
         <div className="mountains" />
         <p className="eyebrow">民俗文化 · 慢生活</p>

@@ -21,7 +21,7 @@ export default function Almanac({ now, almanac }: { now: any; almanac: any }) {
         <summary>彭祖百忌</summary>
         <p>{almanac.taboo}</p>
       </details>
-      <small>方位依《玉匣记》；距离下一节气：待历书校订；民俗文化参考</small>
+      <small>方位依《玉匣记》；{almanac.jieqiText}；民俗文化参考</small>
     </section>
   );
 }
