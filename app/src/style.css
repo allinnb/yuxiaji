@@ -522,6 +522,25 @@ summary {
   opacity: 1;
   background: var(--paper-deep);
 }
+.almanac {
+  margin-top: 18px;
+}
+.almanac h2 {
+  margin: 0.2em 0;
+}
+.almanac-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.almanac-grid strong {
+  color: var(--cinnabar);
+  font-family: MaShan, serif;
+  font-size: 1.3em;
+}
+.almanac-grid p {
+  line-height: 1.8;
+}
 .share-modal {
   position: fixed;
   inset: 0;

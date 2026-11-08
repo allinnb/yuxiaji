@@ -176,6 +176,10 @@ function LegacyPalm({ active, step }: { active: number; step: number }) {
 }
 function App() {
   const [now, setNow] = useState(getNow()),
+    almanac = (data as any).almanac ?? {
+      suitable: ["整饰", "沐浴", "纳财", "出行", "祭祀", "安床"],
+      avoid: ["动土", "嫁娶", "破土", "安葬", "开仓", "伐木"],
+    },
     [tab, setTab] = useState("sign"),
     [sign, setSign] = useState(0),
     [zhi, setZhi] = useState(now.zhi),
@@ -391,6 +395,21 @@ function App() {
           {now.zhi}时
         </div>
       </header>
+      <section className="card almanac">
+        <p className="eyebrow">今日黄历</p>
+        <h2>{now.solar}</h2>
+        <div className="almanac-grid">
+          <div>
+            <strong>宜</strong>
+            <p>{almanac.suitable.slice(0, 6).join(" · ")}</p>
+          </div>
+          <div>
+            <strong>忌</strong>
+            <p>{almanac.avoid.slice(0, 6).join(" · ")}</p>
+          </div>
+        </div>
+        <small>方位依《玉匣记》；民俗文化参考</small>
+      </section>
       <section className="hero">
         <div className="mountains" />
         <p className="eyebrow">民俗文化 · 慢生活</p>
