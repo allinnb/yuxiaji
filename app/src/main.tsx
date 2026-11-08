@@ -543,8 +543,54 @@ function App() {
           </div>
           {hint && <p className="hint">{hint}</p>}
           <div className={"blessing " + (v === 4 && h === 5 ? "done" : "dim")}>
-            <p>{(data as any).zongheng.incantation}</p>
+            <p>
+              {v === 4 && h === 5
+                ? [...(data as any).zongheng.incantation].map((ch, i) => (
+                    <span key={i} style={{ animationDelay: `${i * 120}ms` }}>
+                      {ch}
+                    </span>
+                  ))
+                : (data as any).zongheng.incantation}
+            </p>
             <small>{(data as any).zongheng.after}</small>
+            {v === 4 && h === 5 && (
+              <svg
+                className="stamp"
+                viewBox="0 0 90 90"
+                role="img"
+                aria-label="敕"
+              >
+                <defs>
+                  <filter id="stamp-noise">
+                    <feTurbulence
+                      type="fractalNoise"
+                      baseFrequency=".8"
+                      numOctaves="2"
+                      seed="9"
+                    />
+                    <feDisplacementMap in="SourceGraphic" scale="1.8" />
+                  </filter>
+                </defs>
+                <rect
+                  x="8"
+                  y="8"
+                  width="74"
+                  height="74"
+                  fill="var(--cinnabar)"
+                  filter="url(#stamp-noise)"
+                />
+                <text
+                  x="45"
+                  y="58"
+                  textAnchor="middle"
+                  fill="#fff"
+                  fontFamily="MaShan"
+                  fontSize="48"
+                >
+                  敕
+                </text>
+              </svg>
+            )}
           </div>
           <button
             className="ghost"
