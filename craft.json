@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "attachment",
+  "request": "根据附件中的 DSH-BRIEF.md 和 yuxiaji-phase1.json 开发一个可运行的响应式 Web 应用“玉匣”。请在 app/ 中实现完整 MVP：身体预兆速查、小六壬时课、出门仪式三个功能；使用 React + Vite + TypeScript，将 JSON 数据纳入应用。界面中文、现代东方民俗美学、移动端友好。需要实现交互、当前时辰/农历信息展示、小六壬公式（含“三月初五辰时→小吉”测试）、出门仪式画布 4 竖 5 横、清单勾选、PNG分享卡片（可用浏览器 Canvas）。底部展示免责声明和出处校改记录。不要实现被明确禁止的医疗/改运内容。先阅读附件再开发，完成后运行构建和检查。",
+  "target": {
+    "kind": "local",
+    "path": "D:\\DSH\\attachment"
+  },
+  "stack": "React + TypeScript (Vite)",
+  "status": "new",
+  "note": "",
+  "created_ms": 1794109157496,
+  "updated_ms": 1794109157496,
+  "checks": [],
+  "agent_session": null,
+  "allowed_actions": [],
+  "last_reply": "",
+  "asset_budget_usd": 5.0,
+  "generate_assets": false
+}
