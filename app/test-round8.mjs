@@ -1,0 +1,11 @@
+import {Solar} from 'lunar-javascript';
+import {liurenSeq} from './src/lib/liuren.ts';
+import {dayCn, calendarNow} from './src/lib/calendar.ts';
+const names=['大安','留连','速喜','赤口','小吉','空亡'];
+if(names[liurenSeq(3,5,4)[2]]!=='小吉') throw new Error('三月初五辰时应为小吉');
+if(calendarNow(new Date(2026,10,8)).solar!=='2026年11月8日') throw new Error('中文公历日期错误');
+for(let i=1;i<=30;i++) if(!dayCn(i)) throw new Error(`农历日 ${i} 缺失`);
+const data=JSON.parse(await (await import('node:fs/promises')).readFile(new URL('./src/data.json',import.meta.url),'utf8'));
+if(data.directions.xi.map['丙']!=='西南'||data.directions.fu.map['丙']!=='正东'||data.directions.cai.map['丙']!=='西南'||data.directions.wugui.map['丙']!=='正北') throw new Error('丙日方位不符合玉匣记');
+console.log('ok: 第八轮日历、小六壬、丙日方位验收通过');
+EOF
