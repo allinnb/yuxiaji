@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Solar } from "lunar-javascript";
 import data from "./data.json";
+import PalmChart from "./components/PalmChart";
 import "./style.css";
 const zhis = [
     "子",
@@ -125,15 +126,15 @@ function Compass({ gan, dir }: { gan: string; dir: any }) {
         return (
           <g
             key={name}
-            className={(m === "避" ? "avoid " : "") + (m ? "marked" : "")}
+            className={(m.includes("避") ? "avoid " : "") + (m.split("·").some((k) => k !== "避") ? "marked" : "")}
           >
             <path
               d={`M160 160 L${160 + 148 * Math.cos(a - Math.PI / 8)} ${160 + 148 * Math.sin(a - Math.PI / 8)} A148 148 0 0 1 ${160 + 148 * Math.cos(a + Math.PI / 8)} ${160 + 148 * Math.sin(a + Math.PI / 8)} Z`}
             />
-            <text x={x} y={y - 14} textAnchor="middle">
+            <text className="gua" x={x} y={y - 14} textAnchor="middle">
               {gua}
             </text>
-            <text x={x} y={y + 8} textAnchor="middle">
+            <text className="dir" x={x} y={y + 8} textAnchor="middle">
               {name}
             </text>
             <text x={x} y={y + 27} textAnchor="middle" className="dir-mark">
@@ -145,7 +146,7 @@ function Compass({ gan, dir }: { gan: string; dir: any }) {
     </svg>
   );
 }
-function Palm({ active, step }: { active: number; step: number }) {
+function LegacyPalm({ active, step }: { active: number; step: number }) {
   const points = [
     [74, 86],
     [74, 40],
@@ -248,7 +249,12 @@ function App() {
       g.stroke();
       last.current = p;
     }
-    if (e.type === "pointerup" || e.type === "pointercancel") {
+    if (e.type === "pointercancel") {
+      last.current = null;
+      startRef.current = null;
+      return;
+    }
+    if (e.type === "pointerup") {
       if (startRef.current && last.current) {
         const dx = p.x - startRef.current.x,
           dy = p.y - startRef.current.y;
@@ -430,7 +436,7 @@ function App() {
               </label>
             </div>
           )}
-          <Palm active={idx} step={step} />
+          <PalmChart active={idx} visited={[]} />
           <div className="steps">
             <span>月：{palaces[(month - 1) % 6]}</span>
             <span>日：{palaces[(month - 1 + day - 1) % 6]}</span>

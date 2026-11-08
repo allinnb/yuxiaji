@@ -437,39 +437,7 @@ summary {
 .compass .avoid .dir-mark {
   fill: var(--azurite);
 }
-.palm {
-  width: 100%;
-  max-width: 420px;
-  display: block;
-  margin: 20px auto;
-}
-.palm > path:first-child {
-  fill: var(--paper-deep);
-  stroke: var(--ink-soft);
-  stroke-width: 1.5;
-}
-.palm > path:nth-child(2) {
-  fill: none;
-  stroke: var(--gold);
-  stroke-dasharray: 3 4;
-}
-.palm circle {
-  fill: var(--paper);
-  stroke: var(--gold);
-  stroke-width: 1.5;
-  transition: fill 0.2s;
-}
-.palm text {
-  fill: var(--ink);
-  font-size: 12px;
-  font-family: LXGW, serif;
-}
-.palm .active circle {
-  fill: var(--cinnabar);
-}
-.palm .active text {
-  fill: #fff;
-}
+.palm{width:100%;max-width:300px;display:block;margin:16px auto}.palm-outline{fill:#4a3c30;stroke:#4a3c30;stroke-width:3.2;stroke-linejoin:round}.palm-fill{fill:url(#palm-skin)}.palm-crease{fill:none;stroke:#a88f70;stroke-width:1;stroke-linecap:round;opacity:.85}.palm-lines{fill:none;stroke:#bfa785;stroke-width:1.1;stroke-linecap:round;opacity:.75}.palm-loop{fill:none;stroke:var(--gold);stroke-width:1;stroke-dasharray:1.5 3.5}.palm .dot{fill:#fdf8ee;stroke:var(--gold);stroke-width:1.2;transition:fill .18s,stroke .18s}.palm .gong text{font-family:LXGW,serif;font-size:10px;fill:var(--ink)}.palm .visited .dot{fill:#e2c3a8}.palm .active .dot{fill:var(--cinnabar);stroke:var(--cinnabar)}.palm .active text{fill:#fff}.palm .glow{fill:url(#palm-glow);transform-box:fill-box;transform-origin:center;animation:gong-pulse 1.6s ease-in-out infinite}@keyframes gong-pulse{50%{opacity:.45;transform:scale(1.25)}}
 .steps {
   display: flex;
   gap: 10px;
