@@ -1,1 +1,1 @@
-{"scripts":{"dev":"vite","build":"tsc && vite build","test":"tsc --noEmit"},"dependencies":{"@vitejs/plugin-react":"latest","lunar-javascript":"latest","react":"latest","react-dom":"latest","typescript":"latest","vite":"latest"},"devDependencies":{}}
+{"scripts":{"dev":"vite","build":"tsc && vite build","test":"tsc --noEmit && node test-lunar.mjs"},"dependencies":{"@vitejs/plugin-react":"latest","lunar-javascript":"^1.7.8","react":"latest","react-dom":"latest","typescript":"latest","vite":"latest"}}
