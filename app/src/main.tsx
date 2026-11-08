@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Solar } from "lunar-javascript";
 import data from "./data.json";
 import PalmChart from "./components/PalmChart";
+import { liurenSeq } from "./lib/liuren";
 import "./style.css";
 const zhis = [
     "子",
@@ -126,7 +127,10 @@ function Compass({ gan, dir }: { gan: string; dir: any }) {
         return (
           <g
             key={name}
-            className={(m.includes("避") ? "avoid " : "") + (m.split("·").some((k) => k !== "避") ? "marked" : "")}
+            className={
+              (m.includes("避") ? "avoid " : "") +
+              (m.split("·").some((k) => k !== "避") ? "marked" : "")
+            }
           >
             <path
               d={`M160 160 L${160 + 148 * Math.cos(a - Math.PI / 8)} ${160 + 148 * Math.sin(a - Math.PI / 8)} A148 148 0 0 1 ${160 + 148 * Math.cos(a + Math.PI / 8)} ${160 + 148 * Math.sin(a + Math.PI / 8)} Z`}
@@ -190,10 +194,11 @@ function App() {
   }, []);
   const item: any = (data as any).signs[sign],
     entry: any = item.entries.find((e: any) => e.zhi === zhi),
-    idx = (month - 1 + day - 1 + zhis.indexOf(time)) % 6,
+    idx = liurenSeq(month, day, zhis.indexOf(time))[2],
     palace: any = (data as any).xiaoliuren.palaces[idx],
     dir: any = (data as any).directions;
-  const monthText = monthNames[month - 1] + "月",
+  const seq = liurenSeq(month, day, zhis.indexOf(time)),
+    monthText = monthNames[month - 1] + "月",
     canvas = useRef(null),
     startRef = useRef(null),
     last = useRef(null),
@@ -436,11 +441,11 @@ function App() {
               </label>
             </div>
           )}
-          <PalmChart active={idx} visited={[]} />
+          <PalmChart active={idx} visited={seq.slice(0, 2)} />
           <div className="steps">
-            <span>月：{palaces[(month - 1) % 6]}</span>
-            <span>日：{palaces[(month - 1 + day - 1) % 6]}</span>
-            <span>时：{palace.name}</span>
+            <span className="active">月：{palaces[seq[0]]}</span>
+            <span className="active">日：{palaces[seq[1]]}</span>
+            <span className="active">时：{palace.name}</span>
           </div>
           <p className="formula">
             {monthText}落{palaces[(month - 1) % 6]} → {dayCn(day)}落
