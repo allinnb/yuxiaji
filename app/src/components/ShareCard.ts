@@ -27,8 +27,17 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   canvas.width = 1080;
   canvas.height = 1440;
   const ctx = canvas.getContext("2d")!;
-  ctx.fillStyle = "#f3ead6";
-  ctx.fillRect(0, 0, 1080, 1440);
+  const bg = new Image();
+  bg.src = "/yuxiaji/share-bg.jpg";
+  await new Promise<void>((resolve) => {
+    bg.onload = () => resolve();
+    bg.onerror = () => resolve();
+  });
+  if (bg.naturalWidth) ctx.drawImage(bg, 0, 0, 1080, 1440);
+  else {
+    ctx.fillStyle = "#f3ead6";
+    ctx.fillRect(0, 0, 1080, 1440);
+  }
   ctx.fillStyle = "rgba(243,234,214,.84)";
   ctx.beginPath();
   ctx.roundRect(60, 280, 960, 820, 24);
