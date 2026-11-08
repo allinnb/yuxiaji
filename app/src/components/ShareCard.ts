@@ -28,7 +28,7 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   canvas.height = 1440;
   const ctx = canvas.getContext("2d")!;
   const bg = new Image();
-  bg.src = "/yuxiaji/share-bg.jpg";
+  bg.src = `${import.meta.env.BASE_URL}share-bg.jpg`;
   await new Promise<void>((resolve) => {
     bg.onload = () => resolve();
     bg.onerror = () => resolve();
@@ -48,18 +48,18 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   ctx.fillStyle = "#2a241e";
   ctx.font = "88px MaShan";
   [..."玉匣"].forEach((ch, i) => ctx.fillText(ch, 980, 90 + i * 96));
-  ctx.font = "40px LXGW";
+  ctx.font = "36px LXGW";
   const kindName =
     data.title === "身体预兆"
       ? "身兆"
       : data.title === "小六壬"
         ? "小六壬"
         : "出门";
-  [...kindName].forEach((ch, i) => ctx.fillText(ch, 980, 300 + i * 54));
+  [...kindName].forEach((ch, i) => ctx.fillText(ch, 968, 330 + i * 46));
   ctx.font = "38px LXGW";
   let y = 380;
   data.lines
-    .flatMap((line) => wrapText(ctx, line))
+    .flatMap((line) => wrapText(ctx, line, 800))
     .forEach((line) => {
       ctx.fillText(line, 110, y);
       y += 64;
@@ -76,14 +76,18 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   ctx.textAlign = "center";
   ctx.fillText("用手机相机扫码", 920, 1375);
   ctx.textAlign = "start";
-  ctx.fillStyle = "#2a241e";
-  ctx.font = "30px LXGW";
-  ctx.fillText("民俗参考", 90, 1330);
   ctx.fillStyle = "#a8382a";
   ctx.fillRect(90, 1180, 90, 90);
   ctx.fillStyle = "#fff";
-  ctx.font = "48px MaShan";
-  ctx.fillText("敕", 920, 1315);
+  ctx.font = "56px MaShan";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("敕", 135, 1226);
+  ctx.textAlign = "start";
+  ctx.textBaseline = "alphabetic";
+  ctx.fillStyle = "#2a241e";
+  ctx.font = "30px LXGW";
+  ctx.fillText("民俗参考", 200, 1240);
   return new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, "image/png"),
   );
