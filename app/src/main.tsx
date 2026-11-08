@@ -186,7 +186,7 @@ function App() {
     [step, setStep] = useState(3),
     [visited, setVisited] = useState([] as number[]),
     [running, setRunning] = useState(false),
-    timerRef = useRef<number[]>([]),
+    timerRef = useRef([] as number[]),
     [v, setV] = useState(0),
     [h, setH] = useState(0),
     [hint, setHint] = useState(""),
