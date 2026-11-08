@@ -184,6 +184,8 @@ function App() {
     [time, setTime] = useState(now.zhi),
     [manual, setManual] = useState(false),
     [step, setStep] = useState(3),
+    [visited, setVisited] = useState<number[]>([]),
+    [running, setRunning] = useState(false),
     [v, setV] = useState(0),
     [h, setH] = useState(0),
     [hint, setHint] = useState(""),
@@ -192,6 +194,20 @@ function App() {
     const id = setInterval(() => setNow(getNow()), 60000);
     return () => clearInterval(id);
   }, []);
+  const playLiuren = () => {
+    setRunning(true);
+    setStep(0);
+    setVisited([]);
+    const timers = seq.map((_, i) =>
+      window.setTimeout(() => {
+        setStep(i);
+        setVisited(seq.slice(0, i));
+        if (i === seq.length - 1)
+          window.setTimeout(() => setRunning(false), 500);
+      }, i * 680),
+    );
+    return () => timers.forEach(clearTimeout);
+  };
   const item: any = (data as any).signs[sign],
     entry: any = item.entries.find((e: any) => e.zhi === zhi),
     idx = liurenSeq(month, day, zhis.indexOf(time))[2],
@@ -401,9 +417,13 @@ function App() {
               setMonth(now.month);
               setDay(now.day);
               setTime(now.zhi);
+              playLiuren();
             }}
           >
             按此刻起课
+          </button>
+          <button className="ghost" onClick={playLiuren}>
+            再看一遍
           </button>
           <label>
             <input
@@ -441,11 +461,18 @@ function App() {
               </label>
             </div>
           )}
-          <PalmChart active={idx} visited={seq.slice(0, 2)} />
+          <PalmChart
+            active={running ? seq[Math.min(step, 2)] : idx}
+            visited={running ? visited : seq.slice(0, 2)}
+          />
           <div className="steps">
-            <span className="active">月：{palaces[seq[0]]}</span>
-            <span className="active">日：{palaces[seq[1]]}</span>
-            <span className="active">时：{palace.name}</span>
+            <span className={step >= 0 ? "active" : ""}>
+              月：{palaces[seq[0]]}
+            </span>
+            <span className={step >= 1 ? "active" : ""}>
+              日：{palaces[seq[1]]}
+            </span>
+            <span className={step >= 2 ? "active" : ""}>时：{palace.name}</span>
           </div>
           <p className="formula">
             {monthText}落{palaces[(month - 1) % 6]} → {dayCn(day)}落
