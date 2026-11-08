@@ -186,15 +186,27 @@ function App() {
     [step, setStep] = useState(3),
     [visited, setVisited] = useState([] as number[]),
     [running, setRunning] = useState(false),
+    timerRef = useRef<number[]>([]),
     [v, setV] = useState(0),
     [h, setH] = useState(0),
     [hint, setHint] = useState(""),
     [chant, setChant] = useState(false);
   useEffect(() => {
     const id = setInterval(() => setNow(getNow()), 60000);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      timerRef.current.forEach(clearTimeout);
+    };
   }, []);
   const playLiuren = () => {
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setRunning(false);
+      setStep(3);
+      setVisited(seq.slice(0, 2));
+      return;
+    }
+    timerRef.current.forEach(clearTimeout);
+    timerRef.current = [];
     setRunning(true);
     setStep(0);
     setVisited([]);
@@ -206,7 +218,7 @@ function App() {
           window.setTimeout(() => setRunning(false), 500);
       }, i * 680),
     );
-    return () => timers.forEach(clearTimeout);
+    timerRef.current = timers;
   };
   const item: any = (data as any).signs[sign],
     entry: any = item.entries.find((e: any) => e.zhi === zhi),
