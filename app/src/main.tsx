@@ -184,7 +184,7 @@ function App() {
     [time, setTime] = useState(now.zhi),
     [manual, setManual] = useState(false),
     [step, setStep] = useState(3),
-    [visited, setVisited] = useState<number[]>([]),
+    [visited, setVisited] = useState([] as number[]),
     [running, setRunning] = useState(false),
     [v, setV] = useState(0),
     [h, setH] = useState(0),
