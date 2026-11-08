@@ -71,7 +71,8 @@ function dayCn(n: number) {
   return s[n] || "";
 }
 function getNow() {
-  const l: any = Solar.fromDate(new Date()).getLunar();
+  const date = new Date();
+  const l: any = Solar.fromDate(date).getLunar();
   return {
     l,
     month: Math.abs(l.getMonth()),
@@ -82,7 +83,7 @@ function getNow() {
     yearGz: l.getYearInGanZhi(),
     dayGz: l.getDayInGanZhi(),
     gan: l.getDayGan(),
-    solar: new Date().toLocaleDateString("zh-CN"),
+    solar: `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`,
   };
 }
 function Compass({ gan, dir }: { gan: string; dir: any }) {
@@ -176,9 +177,12 @@ function LegacyPalm({ active, step }: { active: number; step: number }) {
 }
 function App() {
   const [now, setNow] = useState(getNow()),
-    almanac = (data as any).almanac ?? {
+    almanac = {
       suitable: ["整饰", "沐浴", "纳财", "出行", "祭祀", "安床"],
       avoid: ["动土", "嫁娶", "破土", "安葬", "开仓", "伐木"],
+      clash: `冲${now.l.getDayShengXiao?.() ?? ""}`,
+      deity: now.l.getDayZhi?.() ?? "值日",
+      taboo: "甲不开仓，财物耗散；乙不栽植，千株不长",
     },
     [tab, setTab] = useState("sign"),
     [sign, setSign] = useState(0),
@@ -408,7 +412,14 @@ function App() {
             <p>{almanac.avoid.slice(0, 6).join(" · ")}</p>
           </div>
         </div>
-        <small>方位依《玉匣记》；民俗文化参考</small>
+        <p>
+          冲煞：{almanac.clash} · 值神：{almanac.deity}
+        </p>
+        <details>
+          <summary>彭祖百忌</summary>
+          <p>{almanac.taboo}</p>
+        </details>
+        <small>方位依《玉匣记》；距离下一节气：待历书校订；民俗文化参考</small>
       </section>
       <section className="hero">
         <div className="mountains" />
