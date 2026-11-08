@@ -8,4 +8,3 @@ for(let i=1;i<=30;i++) if(!dayCn(i)) throw new Error(`农历日 ${i} 缺失`);
 const data=JSON.parse(await (await import('node:fs/promises')).readFile(new URL('./src/data.json',import.meta.url),'utf8'));
 if(data.directions.xi.map['丙']!=='西南'||data.directions.fu.map['丙']!=='正东'||data.directions.cai.map['丙']!=='西南'||data.directions.wugui.map['丙']!=='正北') throw new Error('丙日方位不符合玉匣记');
 console.log('ok: 第八轮日历、小六壬、丙日方位验收通过');
-EOF
