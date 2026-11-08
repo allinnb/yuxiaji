@@ -4,6 +4,7 @@ import { Solar } from "lunar-javascript";
 import data from "./data.json";
 import PalmChart from "./components/PalmChart";
 import Compass from "./components/Compass";
+import Header from "./components/Header";
 import { liurenSeq } from "./lib/liuren";
 import "./style.css";
 const zhis = [
@@ -390,16 +391,7 @@ function App() {
   };
   return (
     <main>
-      <header>
-        <div className="brand">
-          玉匣<span>古书里的日常小仪式</span>
-        </div>
-        <div className="seal">玉匣</div>
-        <div className="calendar">
-          {now.solar} · {now.yearGz} {now.monthCn}月{now.dayCn} · {now.dayGz} ·{" "}
-          {now.zhi}时
-        </div>
-      </header>
+      <Header now={now} />
       <section className="card almanac">
         <p className="eyebrow">今日黄历</p>
         <h2>{now.solar}</h2>
