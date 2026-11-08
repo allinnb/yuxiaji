@@ -6,6 +6,7 @@ import PalmChart from "./components/PalmChart";
 import Compass from "./components/Compass";
 import Header from "./components/Header";
 import Almanac from "./components/Almanac";
+import { createShareCard, wrapText } from "./components/ShareCard";
 import { liurenSeq } from "./lib/liuren";
 import "./style.css";
 const zhis = [
@@ -334,8 +335,37 @@ function App() {
     setH(0);
     setChant(false);
   };
-  const drawShare = async (kind: string) => {
-    await document.fonts.ready;
+  const drawShare = async (kind: "sign" | "liu" | "out") => {
+    const title =
+      kind === "sign" ? "身体预兆" : kind === "liu" ? "小六壬" : "出门仪式";
+    const lines =
+      kind === "sign"
+        ? [`${item.title} · ${zhi}时`, entry.text]
+        : kind === "liu"
+          ? [
+              `${monthText}落${palaces[seq[0]]} → ${dayCn(day)}落${palaces[seq[1]]} → ${time}时落${palace.name}`,
+              palace.verse,
+            ]
+          : [
+              `喜神 ${dir.xi.map[now.gan]} · 福神 ${dir.fu.map[now.gan]} · 财神 ${dir.cai.map[now.gan]}`,
+              (data as any).zongheng.incantation,
+            ];
+    const b = await createShareCard(kind, { title, lines });
+    if (!b) return;
+    const u = URL.createObjectURL(b);
+    setShareUrl(u);
+    const file = new File([b], `yuxiaji-${kind}.png`, { type: "image/png" });
+    if (navigator.userAgent.includes("MicroMessenger")) return;
+    if (navigator.canShare?.({ files: [file] })) {
+      await navigator.share?.({ files: [file], title: "玉匣" });
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = u;
+    a.download = file.name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(u), 1000);
+    return;
     const c = document.createElement("canvas");
     c.width = 1080;
     c.height = 1440;
