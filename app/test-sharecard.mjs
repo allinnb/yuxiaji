@@ -8,7 +8,7 @@ for (const required of [
   "wrapText(ctx, line, 800)",
   'ctx.fillText("敕", 135, 1226)',
   'ctx.fillText("民俗參考", 200, 1240)',
-  'ctx.fillText("用手机相机扫码", 920, 1375)',
+  'ctx.fillText("用手機相機掃碼", 920, 1375)',
 ]) {
   if (!source.includes(required))
     throw new Error(`分享卡验收缺少: ${required}`);
