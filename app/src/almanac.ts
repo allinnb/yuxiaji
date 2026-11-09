@@ -45,14 +45,35 @@ export function getAlmanac(
     note: ZHI_XING_NOTES[zhiXing],
   };
 }
+export function getJieQiCountdown(year: number, month: number, day: number) {
+  const solar: any = Solar.fromYmd(year, month, day);
+  const lunar: any = solar.getLunar();
+  const today = lunar.getJieQi();
+  if (today) return { name: today, days: 0, text: `今日${today}` };
+  const jieQi: any = lunar.getNextJieQi(true);
+  const days = jieQi.getSolar().subtract(solar);
+  return {
+    name: jieQi.getName(),
+    days,
+    text: `距${jieQi.getName()}还有${days}天`,
+  };
+}
+
 export function beijingYmd(date = new Date()) {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Asia/Shanghai",
+    hourCycle: "h23",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    hour: "2-digit",
   }).formatToParts(date);
   const value = (type: string) =>
     Number(parts.find((p) => p.type === type)!.value);
-  return { year: value("year"), month: value("month"), day: value("day") };
+  return {
+    year: value("year"),
+    month: value("month"),
+    day: value("day"),
+    hour: value("hour"),
+  };
 }

@@ -6,7 +6,7 @@ import PalmChart from "./components/PalmChart";
 import Compass from "./components/Compass";
 import Header from "./components/Header";
 import Almanac from "./components/Almanac";
-import { beijingYmd, getAlmanac } from "./almanac";
+import { beijingYmd, getAlmanac, getJieQiCountdown } from "./almanac";
 import { createShareCard, wrapText } from "./components/ShareCard";
 import { liurenSeq } from "./lib/liuren";
 import "./style.css";
@@ -75,20 +75,24 @@ function dayCn(n: number) {
   ];
   return s[n] || "";
 }
-function getNow() {
-  const date = new Date();
-  const l: any = Solar.fromDate(date).getLunar();
+function getNow(date = new Date()) {
+  const bj = beijingYmd(date);
+  const l: any = Solar.fromYmd(bj.year, bj.month, bj.day).getLunar();
+  const zhi = zhis[Math.floor(((bj.hour + 1) % 24) / 2)];
   return {
     l,
+    year: bj.year,
+    solarMonth: bj.month,
+    solarDay: bj.day,
     month: Math.abs(l.getMonth()),
     day: l.getDay(),
-    zhi: l.getTimeZhi(),
+    zhi,
     monthCn: l.getMonthInChinese(),
     dayCn: l.getDayInChinese(),
     yearGz: l.getYearInGanZhi(),
     dayGz: l.getDayInGanZhi(),
     gan: l.getDayGan(),
-    solar: `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`,
+    solar: `${bj.year}年${bj.month}月${bj.day}日`,
   };
 }
 function LegacyCompass({ gan, dir }: { gan: string; dir: any }) {
@@ -182,17 +186,7 @@ function LegacyPalm({ active, step }: { active: number; step: number }) {
 }
 function App() {
   const [now, setNow] = useState(getNow()),
-    jieqiText = (() => {
-      const jq: any = now.l.getNextJieQi(true);
-      const target = new Date(jq.getSolar().toYmd());
-      const base = new Date(
-        `${now.solar.slice(0, 4)}-${now.solar.slice(5, 7)}-${now.solar.slice(8, 10)}`,
-      );
-      const days = Math.ceil((target.getTime() - base.getTime()) / 86400000);
-      return days === 0
-        ? `今日${jq.getName()}`
-        : `距${jq.getName()}还有${days}天`;
-    })(),
+    jieqiText = getJieQiCountdown(now.year, now.solarMonth, now.solarDay).text,
     beijing = beijingYmd(),
     almanac = getAlmanac(beijing.year, beijing.month, beijing.day),
     [tab, setTab] = useState("sign"),

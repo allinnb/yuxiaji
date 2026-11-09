@@ -1,4 +1,4 @@
-import { getAlmanac } from "./src/almanac.ts";
+import { beijingYmd, getAlmanac, getJieQiCountdown } from "./src/almanac.ts";
 import assert from "node:assert/strict";
 const cases = [
   [
@@ -78,3 +78,50 @@ for (let d = 1; d <= 30; d++) {
   previous = current;
 }
 console.log("ok: 连续30天相邻黄历结果均不完全相同");
+const jieQiCases = [
+  [2026, 11, 8, "距小雪还有14天"],
+  [2026, 11, 9, "距小雪还有13天"],
+  [2026, 11, 22, "今日小雪"],
+  [2026, 11, 23, "距大雪还有14天"],
+  [2026, 12, 6, "距大雪还有1天"],
+  [2026, 12, 7, "今日大雪"],
+  [2027, 2, 3, "距立春还有1天"],
+  [2027, 2, 4, "今日立春"],
+];
+for (const [y, m, d, text] of jieQiCases) {
+  const actual = getJieQiCountdown(y, m, d);
+  assert.equal(actual.text, text);
+  console.log(
+    `ok: ${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")} → ${actual.text}`,
+  );
+}
+for (
+  let time = Date.UTC(2026, 10, 1);
+  time <= Date.UTC(2027, 11, 31);
+  time += 86400000
+) {
+  const p = new Date(time);
+  const r = getJieQiCountdown(
+    p.getUTCFullYear(),
+    p.getUTCMonth() + 1,
+    p.getUTCDate(),
+  );
+  assert.ok(!r.text.includes("NaN"));
+  assert.ok(Number.isInteger(r.days) && r.days >= 0 && r.days <= 15);
+}
+console.log(
+  "ok: 2026-11-01 至 2027-12-31 节气倒计时无 NaN，days 均为 0–15 整数",
+);
+assert.deepEqual(beijingYmd(new Date(Date.UTC(2026, 10, 9, 17, 0))), {
+  year: 2026,
+  month: 11,
+  day: 10,
+  hour: 1,
+});
+assert.deepEqual(beijingYmd(new Date(Date.UTC(2026, 10, 9, 15, 59))), {
+  year: 2026,
+  month: 11,
+  day: 9,
+  hour: 23,
+});
+console.log("ok: 北京日期跨 UTC 日界验证通过");
