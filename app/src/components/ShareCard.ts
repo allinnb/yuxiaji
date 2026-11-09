@@ -74,7 +74,7 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   ctx.fillStyle = "#a8382a";
   ctx.font = "26px LXGW";
   ctx.textAlign = "center";
-  ctx.fillText("用手机相机扫码", 920, 1375);
+  ctx.fillText("用手機相機掃碼", 920, 1375);
   ctx.textAlign = "start";
   ctx.fillStyle = "#a8382a";
   ctx.fillRect(90, 1180, 90, 90);
@@ -87,7 +87,7 @@ export async function createShareCard(kind: ShareKind, data: ShareData) {
   ctx.textBaseline = "alphabetic";
   ctx.fillStyle = "#2a241e";
   ctx.font = "30px LXGW";
-  ctx.fillText("民俗参考", 200, 1240);
+  ctx.fillText("民俗參考", 200, 1240);
   return new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, "image/png"),
   );

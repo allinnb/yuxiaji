@@ -193,11 +193,11 @@ function App() {
         : `距${jq.getName()}还有${days}天`;
     })(),
     almanac = {
-      suitable: ["整饰", "沐浴", "纳财", "出行", "祭祀", "安床"],
-      avoid: ["动土", "嫁娶", "破土", "安葬", "开仓", "伐木"],
-      clash: `冲${now.l.getDayShengXiao?.() ?? ""}`,
+      suitable: ["整飾", "沐浴", "納財", "出行", "祭祀", "安床"],
+      avoid: ["動土", "嫁娶", "破土", "安葬", "開倉", "伐木"],
+      clash: `沖${now.l.getDayShengXiao?.() ?? ""}`,
       deity: now.l.getDayZhi?.() ?? "值日",
-      taboo: "甲不开仓，财物耗散；乙不栽植，千株不长",
+      taboo: "甲不開倉，財物耗散；乙不栽植，千株不長",
     },
     [tab, setTab] = useState("sign"),
     [sign, setSign] = useState(0),
@@ -328,9 +328,9 @@ function App() {
         const vertical = Math.abs(dy) > Math.abs(dx) * 1.5 && Math.abs(dy) > 40,
           horizontal = Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 40;
         if (vertical && v < 4) setV((x) => x + 1);
-        else if (horizontal && v < 4) setHint("先画四纵");
+        else if (horizontal && v < 4) setHint("先畫四縱");
         else if (horizontal && h < 5) setH((x) => x + 1);
-        else if (!vertical && !horizontal) setHint("笔画请横平竖直");
+        else if (!vertical && !horizontal) setHint("筆畫請橫平豎直");
         if (v === 4 && h === 4 && horizontal) setChant(true);
       }
       g.globalAlpha = 1;
@@ -348,7 +348,7 @@ function App() {
   };
   const drawShare = async (kind: "sign" | "liu" | "out") => {
     const title =
-      kind === "sign" ? "身体预兆" : kind === "liu" ? "小六壬" : "出门仪式";
+      kind === "sign" ? "身體預兆" : kind === "liu" ? "小六壬" : "出門儀式";
     const lines =
       kind === "sign"
         ? [`${item.title} · ${zhi}时`, entry.text]
@@ -388,7 +388,7 @@ function App() {
     x.fillText("玉匣", 90, 140);
     x.font = "42px LXGW";
     x.fillText(
-      kind === "sign" ? "身体预兆" : kind === "liu" ? "小六壬" : "出门仪式",
+      kind === "sign" ? "身體預兆" : kind === "liu" ? "小六壬" : "出門儀式",
       90,
       230,
     );
@@ -409,7 +409,7 @@ function App() {
       x.fillText(line.slice(0, 34), 90, 340 + i * 70),
     );
     x.font = "30px LXGW";
-    x.fillText("民俗参考 · yuxiaji.puwa.online", 90, 1260);
+    x.fillText("民俗參考 · yuxiaji.puwa.online", 90, 1260);
     x.fillStyle = "#a8382a";
     x.fillRect(900, 1250, 90, 90);
     x.fillStyle = "#fff";
@@ -443,12 +443,12 @@ function App() {
           <br />
           <em>放进今天的日常</em>
         </h1>
-        <p>一方小匣，收纳身体预兆、时课推演与出门仪式。</p>
+        <p>一方小匣，收納身體預兆、時課推演與出門儀式。</p>
       </section>
       <nav>
         {[
           ["sign", "卷一 身兆"],
-          ["liu", "卷二 时课"],
+          ["liu", "卷二 時課"],
           ["out", "卷三 出行"],
         ].map(([k, t]) => (
           <button
@@ -464,7 +464,7 @@ function App() {
           <div className="section-head">
             <div>
               <p className="eyebrow">杂占篇</p>
-              <h2>身体预兆速查</h2>
+              <h2>身體預兆速查</h2>
             </div>
             <button className="ghost" onClick={() => drawShare("sign")}>
               生成分享卡
@@ -481,7 +481,7 @@ function App() {
             ))}
           </div>
           <label>
-            时辰
+            時辰
             <select value={zhi} onChange={(e) => setZhi(e.target.value)}>
               {zhis.map((z) => (
                 <option>{z}</option>
@@ -498,7 +498,7 @@ function App() {
       {tab === "liu" && (
         <section className="card">
           <p className="eyebrow">时课篇</p>
-          <h2>小六壬 · 指掌起课</h2>
+          <h2>小六壬 · 指掌起課</h2>
           <button
             className="ghost"
             onClick={() => {
@@ -586,7 +586,7 @@ function App() {
       {tab === "out" && (
         <section className="card">
           <p className="eyebrow">出行篇</p>
-          <h2>出门仪式</h2>
+          <h2>出門儀式</h2>
           <div className="directions">
             <Compass gan={now.gan} dir={dir} />
             <div>

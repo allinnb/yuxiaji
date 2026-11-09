@@ -2,7 +2,7 @@ import React from "react";
 export default function Almanac({ now, almanac }: { now: any; almanac: any }) {
   return (
     <section className="card almanac">
-      <p className="eyebrow">今日黄历</p>
+      <p className="eyebrow">今日黃曆</p>
       <h2>{now.solar}</h2>
       <div className="almanac-grid">
         <div>
@@ -15,13 +15,13 @@ export default function Almanac({ now, almanac }: { now: any; almanac: any }) {
         </div>
       </div>
       <p>
-        冲煞：{almanac.clash} · 值神：{almanac.deity}
+        沖煞：{almanac.clash} · 值神：{almanac.deity}
       </p>
       <details>
         <summary>彭祖百忌</summary>
         <p>{almanac.taboo}</p>
       </details>
-      <small>方位依《玉匣记》；{almanac.jieqiText}；民俗文化参考</small>
+      <small>方位依《玉匣記》；{almanac.jieqiText}；民俗文化參考</small>
     </section>
   );
 }
