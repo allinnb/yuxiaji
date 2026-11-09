@@ -6,6 +6,7 @@ import PalmChart from "./components/PalmChart";
 import Compass from "./components/Compass";
 import Header from "./components/Header";
 import Almanac from "./components/Almanac";
+import { beijingYmd, getAlmanac } from "./almanac";
 import { createShareCard, wrapText } from "./components/ShareCard";
 import { liurenSeq } from "./lib/liuren";
 import "./style.css";
@@ -192,13 +193,8 @@ function App() {
         ? `今日${jq.getName()}`
         : `距${jq.getName()}还有${days}天`;
     })(),
-    almanac = {
-      suitable: ["整飾", "沐浴", "納財", "出行", "祭祀", "安床"],
-      avoid: ["動土", "嫁娶", "破土", "安葬", "開倉", "伐木"],
-      clash: `沖${now.l.getDayShengXiao?.() ?? ""}`,
-      deity: now.l.getDayZhi?.() ?? "值日",
-      taboo: "甲不開倉，財物耗散；乙不栽植，千株不長",
-    },
+    beijing = beijingYmd(),
+    almanac = getAlmanac(beijing.year, beijing.month, beijing.day),
     [tab, setTab] = useState("sign"),
     [sign, setSign] = useState(0),
     [zhi, setZhi] = useState(now.zhi),
